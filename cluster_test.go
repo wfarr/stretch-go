@@ -1,7 +1,6 @@
 package stretch
 
 import (
-	"fmt"
 	"net/http"
 
 	"net/http/httptest"
@@ -11,7 +10,7 @@ import (
 
 func testServer(resp string) (ts *httptest.Server) {
 	ts = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, resp)
+		w.Write([]byte(resp))
 	}))
 	return
 }
