@@ -11,9 +11,22 @@ type ClusterHealth struct {
 	RelocatingShards    int    `json:"relocating_shards"`
 	InitializingShards  int    `json:"initializing_shards"`
 	UnassignedShards    int    `json:"unassigned_shards"`
+	// Map of "index-name-as-string": IndexHealth
+	Indices map[string]*IndexHealth `json:"indices"`
 }
 
-func (c *Cluster) GetHealth() (data ClusterHealth) {
-	c.Client.Get(&data, "/_cluster/health")
+type IndexHealth struct {
+	Status              string `json:"status"`
+	NumberOfShards      int    `json:"number_of_shards"`
+	NumberOfReplicas    int    `json:"number_of_replicas"`
+	ActivePrimaryShards int    `json:"active_primary_shards"`
+	ActiveShards        int    `json:"active_shards"`
+	RelocatingShards    int    `json:"relocating_shards"`
+	InitializingShards  int    `json:"initializing_shards"`
+	UnassignedShards    int    `json:"unassigned_shards"`
+}
+
+func (c *Cluster) GetHealth(indices ...string) (data ClusterHealth) {
+	c.Client.Get(&data, "/_cluster/health?level=indices")
 	return
 }
