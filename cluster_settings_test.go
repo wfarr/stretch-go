@@ -7,12 +7,13 @@ import (
 func TestClusterSettingsOhNinety(t *testing.T) {
 	ts := testServer(`{
 		"persistent": {
-			"cluster.routing.allocation.disable_allocation": false,
-			"cluster.routing.allocation.disable_replica_allocation": false
+			"cluster.routing.allocation.disable_allocation": true
 		},
 		"transient": {
-			"cluster.routing.allocation.disable_allocation": true,
-			"cluster.routing.allocation.disable_replica_allocation": true
+			"cluster.routing.allocation.disable_replica_allocation": true,
+			"indices.recovery.max_bytes_per_sec" : "2gb",
+			"indices.recovery.concurrent_streams" : "24",
+			"cluster.routing.allocation.node_concurrent_recoveries" : "6"
 		}
 	}`)
 
@@ -21,7 +22,7 @@ func TestClusterSettingsOhNinety(t *testing.T) {
 	cluster := &Cluster{&Client{URL: ts.URL}}
 	settings := cluster.GetSettings()
 
-	if settings.Persistent.ClusterRoutingAllocationDisableAllocation != false {
+	if settings.Persistent.ClusterRoutingAllocationDisableAllocation != true {
 		t.Fail()
 	}
 
@@ -29,11 +30,11 @@ func TestClusterSettingsOhNinety(t *testing.T) {
 		t.Fail()
 	}
 
-	if !settings.Transient.ClusterRoutingAllocationDisableAllocation {
+	if settings.Transient.ClusterRoutingAllocationDisableAllocation != false {
 		t.Fail()
 	}
 
-	if !settings.Transient.ClusterRoutingAllocationDisableReplicaAllocation {
+	if settings.Transient.ClusterRoutingAllocationDisableReplicaAllocation != true {
 		t.Fail()
 	}
 }

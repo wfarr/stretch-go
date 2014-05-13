@@ -1,17 +1,17 @@
 package stretch
 
 type FullClusterSettings struct {
-	Persistent ClusterSettings `json:"persistent"`
-	Transient  ClusterSettings `json:"transient"`
+	Persistent *ClusterSettings `json:"persistent"`
+	Transient  *ClusterSettings `json:"transient"`
 }
 
 type ClusterSettings struct {
 	// 0.90 allocation settings
-	ClusterRoutingAllocationDisableAllocation        bool `json:"cluster.routing.allocation.disable_allocation"`
-	ClusterRoutingAllocationDisableReplicaAllocation bool `json:"cluster.routing.allocation.disable_replica_allocation"`
+	ClusterRoutingAllocationDisableAllocation        bool `json:"cluster.routing.allocation.disable_allocation,omitempty"`
+	ClusterRoutingAllocationDisableReplicaAllocation bool `json:"cluster.routing.allocation.disable_replica_allocation,omitempty"`
 
 	// 1.0 allocation settings
-	ClusterRoutingAllocationEnable string `json:"cluster.routing.allocation.enable"`
+	ClusterRoutingAllocationEnable string `json:"cluster.routing.allocation.enable,omitempty"`
 }
 
 func (c *Cluster) GetSettings() (data FullClusterSettings) {
