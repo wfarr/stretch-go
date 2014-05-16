@@ -15,7 +15,8 @@ type ClusterNode struct {
 	Attributes       map[string]string `json:"attributes"`
 }
 
-func (c *Cluster) GetNodes() (data ClusterNodes) {
-	c.Client.Get(&data, "/_cluster/nodes")
-	return
+func (c *Cluster) GetNodes() (ClusterNodes, error) {
+	var data ClusterNodes
+	err := c.Client.Get(&data, "/_cluster/nodes")
+	return data, err
 }

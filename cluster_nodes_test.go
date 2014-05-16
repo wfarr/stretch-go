@@ -27,7 +27,11 @@ func TestClusterNodes(t *testing.T) {
 	defer ts.Close()
 
 	cluster := &Cluster{&Client{URL: ts.URL}}
-	nodes := cluster.GetNodes()
+	nodes, err := cluster.GetNodes()
+
+	if err != nil {
+		t.Fail()
+	}
 
 	if nodes.OK != true {
 		t.Fail()
