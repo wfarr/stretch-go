@@ -21,7 +21,11 @@ func TestClusterSettingsOhNinety(t *testing.T) {
 	defer ts.Close()
 
 	cluster := &Cluster{&Client{URL: ts.URL}}
-	settings := cluster.GetSettings()
+	settings, err := cluster.GetSettings()
+
+	if err != nil {
+		t.Fail()
+	}
 
 	if settings.Persistent["cluster.routing.allocation.disable_allocation"] != "true" {
 		t.Fail()
@@ -49,7 +53,11 @@ func TestClusterSettingsOneOh(t *testing.T) {
 	defer ts.Close()
 
 	cluster := &Cluster{&Client{URL: ts.URL}}
-	settings := cluster.GetSettings()
+	settings, err := cluster.GetSettings()
+
+	if err != nil {
+		t.Fail()
+	}
 
 	if settings.Persistent["cluster.routing.allocation.enable"] != "all" {
 		t.Fail()
