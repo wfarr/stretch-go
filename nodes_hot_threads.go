@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func (c *Cluster) GetHotThreads(nodes ...string) (responseBody string) {
+func (c *Cluster) GetHotThreads(nodes ...string) (string, error) {
 	var nodestr string
 	var buf bytes.Buffer
 
@@ -16,7 +16,7 @@ func (c *Cluster) GetHotThreads(nodes ...string) (responseBody string) {
 		nodestr = "_all"
 	}
 
-	c.Client.Get(&buf, fmt.Sprintf("/_nodes/%s/hot_threads", nodestr))
+	err := c.Client.Get(&buf, fmt.Sprintf("/_nodes/%s/hot_threads", nodestr))
 
-	return buf.String()
+	return buf.String(), err
 }

@@ -26,7 +26,11 @@ func TestNodesHotThreads(t *testing.T) {
 	defer ts.Close()
 
 	cluster := &Cluster{&Client{URL: ts.URL}}
-	hotThreads := cluster.GetHotThreads()
+	hotThreads, err := cluster.GetHotThreads()
+
+	if err != nil {
+		t.Fail()
+	}
 
 	if hotThreads != response {
 		t.Fail()
