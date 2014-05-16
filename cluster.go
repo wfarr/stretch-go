@@ -25,12 +25,14 @@ type ClusterState struct {
 	MasterNode  string `json:"master_node"`
 }
 
-func (c *Cluster) GetInfo() (data ClusterInfo) {
-	c.Client.Get(&data, "/")
-	return
+func (c *Cluster) GetInfo() (ClusterInfo, error) {
+	var data ClusterInfo
+	err := c.Client.Get(&data, "/")
+	return data, err
 }
 
-func (c *Cluster) GetState() (data ClusterState) {
-	c.Client.Get(&data, "/_cluster/state")
-	return
+func (c *Cluster) GetState() (ClusterState, error) {
+	var data ClusterState
+	err := c.Client.Get(&data, "/_cluster/state")
+	return data, err
 }

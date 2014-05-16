@@ -34,7 +34,11 @@ func TestClusterInfo(t *testing.T) {
 	defer ts.Close()
 
 	cluster := &Cluster{&Client{URL: ts.URL}}
-	ci := cluster.GetInfo()
+	ci, err := cluster.GetInfo()
+
+	if err != nil {
+		t.Fail()
+	}
 
 	if !ci.Ok {
 		t.Error("ci.Ok was not true")
