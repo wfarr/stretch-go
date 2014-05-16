@@ -12,6 +12,9 @@ func (c *Cluster) GetSettings() (FullClusterSettings, error) {
 }
 
 func (c *Cluster) SetSettings(settings interface{}) error {
+	// TODO: re-examine the type of settings, ES may allow us to
+	//       simply treat this as map[string]string, and it could
+	//       just work without this vague interface{} catch-all
 	err := c.Client.Put(nil, "/_cluster/settings", settings)
 	return err
 }
