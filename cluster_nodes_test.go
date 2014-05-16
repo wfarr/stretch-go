@@ -1,11 +1,12 @@
 package stretch
 
 import (
+	"net/http"
 	"testing"
 )
 
 func TestClusterNodes(t *testing.T) {
-	ts := testServer(`{
+	ts := testServer(http.StatusOK, `{
 		"ok": true,
 		"cluster_name": "foobar",
 		"nodes": {

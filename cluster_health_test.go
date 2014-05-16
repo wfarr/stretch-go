@@ -1,11 +1,12 @@
 package stretch
 
 import (
+	"net/http"
 	"testing"
 )
 
 func TestClusterHealth(t *testing.T) {
-	ts := testServer(`{
+	ts := testServer(http.StatusOK, `{
 		"status": "tangerine",
 		"cluster_name": "foobar",
 		"timed_out" : false,
@@ -21,7 +22,11 @@ func TestClusterHealth(t *testing.T) {
 	defer ts.Close()
 
 	cluster := &Cluster{&Client{URL: ts.URL}}
-	health := cluster.GetHealth()
+	health, err := cluster.GetHealth()
+
+	if err != nil {
+		t.Fail()
+	}
 
 	if health.Status != "tangerine" {
 		t.Fail()
@@ -56,7 +61,7 @@ func TestClusterHealth(t *testing.T) {
 }
 
 func TestClusterHealthWithIndices(t *testing.T) {
-	ts := testServer(`{
+	ts := testServer(http.StatusOK, `{
 		"status": "tangerine",
 		"cluster_name": "foobar",
 		"timed_out" : false,
@@ -88,12 +93,17 @@ func TestClusterHealthWithIndices(t *testing.T) {
 				"initializing_shards" : 0,
 				"unassigned_shards" : 0
 			}
-		}`)
+		}
+	}`)
 
 	defer ts.Close()
 
 	cluster := &Cluster{&Client{URL: ts.URL}}
-	health := cluster.GetHealth()
+	health, err := cluster.GetHealth()
+
+	if err != nil {
+		t.Error(err)
+	}
 
 	for indexName, indexHealth := range health.Indices {
 		if indexName == "" {
@@ -131,5 +141,18 @@ func TestClusterHealthWithIndices(t *testing.T) {
 		if indexHealth.UnassignedShards != 0 {
 			t.Fail()
 		}
+	}
+}
+
+func TestClusterHealthErrorResponse(t *testing.T) {
+	ts := testServer(http.StatusInternalServerError, ``)
+
+	defer ts.Close()
+
+	cluster := &Cluster{&Client{URL: ts.URL}}
+	_, err := cluster.GetHealth()
+
+	if err == nil {
+		t.Fail()
 	}
 }

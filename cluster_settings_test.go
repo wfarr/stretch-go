@@ -1,11 +1,12 @@
 package stretch
 
 import (
+	"net/http"
 	"testing"
 )
 
 func TestClusterSettingsOhNinety(t *testing.T) {
-	ts := testServer(`{
+	ts := testServer(http.StatusOK, `{
 		"persistent": {
 			"cluster.routing.allocation.disable_allocation": "true"
 		},
@@ -36,7 +37,7 @@ func TestClusterSettingsOhNinety(t *testing.T) {
 }
 
 func TestClusterSettingsOneOh(t *testing.T) {
-	ts := testServer(`{
+	ts := testServer(http.StatusOK, `{
 		"persistent": {
 			"cluster.routing.allocation.enable": "all"
 		},

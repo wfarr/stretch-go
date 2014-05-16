@@ -1,6 +1,7 @@
 package stretch
 
 import (
+	"net/http"
 	"testing"
 )
 
@@ -21,7 +22,7 @@ func TestNodesHotThreads(t *testing.T) {
        java.lang.Thread.run(Thread.java:745)
 `
 
-	ts := testServer(response)
+	ts := testServer(http.StatusOK, response)
 	defer ts.Close()
 
 	cluster := &Cluster{&Client{URL: ts.URL}}

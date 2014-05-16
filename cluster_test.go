@@ -8,15 +8,16 @@ import (
 	"testing"
 )
 
-func testServer(resp string) (ts *httptest.Server) {
+func testServer(status int, resp string) (ts *httptest.Server) {
 	ts = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(status)
 		w.Write([]byte(resp))
 	}))
 	return
 }
 
 func TestClusterInfo(t *testing.T) {
-	ts := testServer(`{
+	ts := testServer(http.StatusOK, `{
 		"ok" : true,
 		"status" : 200,
 		"name" : "boxen",
