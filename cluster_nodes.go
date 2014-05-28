@@ -17,6 +17,6 @@ type ClusterNode struct {
 
 func (c *Cluster) GetNodes() (ClusterNodes, error) {
 	var data ClusterNodes
-	err := c.Client.Get(&data, "/_cluster/nodes")
+	err := c.Client.Get(&data, "/_nodes/_all/process")
 	return data, err
 }
