@@ -10,6 +10,7 @@ type ClusterNode struct {
 	Name             string            `json:"name"`
 	TransportAddress string            `json:"transport_address"`
 	Hostname         string            `json:"hostname"`
+	Host             string            `json:"host"`
 	Version          string            `json:"version"`
 	HTTPAddress      string            `json:"http_address"`
 	Attributes       map[string]string `json:"attributes"`
